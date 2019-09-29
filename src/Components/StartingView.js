@@ -6,12 +6,26 @@ const StargtingView = props => {
   return (
     <Wrapper>
       <Title />
-      <button value="easy">Easy</button>
-      <button value="medium">Medium</button>
-      <button value="hard">Hard</button>
-      <button value="very-hard">Very Hard</button>
-      <button value="insane">Insane</button>
-      <button value="inhuman">Inhuman</button>
+      <div className="level">
+        <button onClick={event => props.level(event)} value="easy">
+          Easy
+        </button>
+        <button onClick={event => props.level(event)} value="medium">
+          Medium
+        </button>
+        <button onClick={event => props.level(event)} value="hard">
+          Hard
+        </button>
+        <button onClick={event => props.level(event)} value="very-hard">
+          Very Hard
+        </button>
+        <button onClick={event => props.level(event)} value="insane">
+          Insane
+        </button>
+        <button onClick={event => props.level(event)} value="inhuman">
+          Inhuman
+        </button>
+      </div>
     </Wrapper>
   );
 };

@@ -13,17 +13,10 @@ class App extends React.Component {
     this.state = {
       playing: false,
       level: "",
-      initialBoard: sudoku.generate("easy"),
+      initialBoard: "",
       board: "",
       boardArr: []
     };
-  }
-
-  componentDidMount() {
-    this.setState({
-      boardArr: [...this.state.initialBoard],
-      initialBoard: [...this.state.initialBoard]
-    });
   }
 
   onBoardChange = (event, i) => {
@@ -37,7 +30,7 @@ class App extends React.Component {
   };
 
   newGame = () => {
-    let nextGame = [...sudoku.generate("easy")];
+    let nextGame = [...sudoku.generate(this.state.level)];
     this.setState({ initialBoard: nextGame, boardArr: nextGame });
   };
 
@@ -51,6 +44,7 @@ class App extends React.Component {
     let solve = this.state.boardArr.join("");
     solve = sudoku.solve(solve);
     this.setState({ boardArr: [...solve] });
+    console.log(this.state);
   };
 
   checkGame = () => {
@@ -60,28 +54,37 @@ class App extends React.Component {
       : alert("You're close but not close enough");
   };
 
-  assignDifficulty = (event, level) => {
-    this.setState({ playing: true, level: event.target.value });
+  assignDifficulty = event => {
+    let board = [...sudoku.generate(event.target.value)];
+    this.setState({
+      playing: true,
+      level: event.target.value,
+      initialBoard: board,
+      boardArr: board
+    });
   };
 
   render() {
     return (
       <div className="App">
-        <Wrapper>
-          <Title />
-          <Board
-            boardArr={this.state.boardArr}
-            board={this.state.board}
-            initialBoard={this.state.initialBoard}
-            onBoardChange={this.onBoardChange}
-          />
-          <Controls
-            newGame={this.newGame}
-            reset={this.resetGame}
-            check={this.checkGame}
-            solved={this.solveGame}
-          />
-        </Wrapper>
+        {!this.state.playing ? (
+          <StartingView level={this.assignDifficulty} />
+        ) : (
+          <Wrapper>
+            <Title />
+            <Board
+              boardArr={this.state.boardArr}
+              board={this.state.board}
+              onBoardChange={this.onBoardChange}
+            />
+            <Controls
+              newGame={this.newGame}
+              reset={this.resetGame}
+              check={this.checkGame}
+              solved={this.solveGame}
+            />
+          </Wrapper>
+        )}
       </div>
     );
   }

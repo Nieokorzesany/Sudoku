@@ -1,0 +1,15 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input {
+  border: 1px solid blue;
+  font-size: 25px;
+  font-weight: bolder;
+  box-sizing: border-box;
+  text-align: center;
+  width: calc(100% / 9);
+  height: calc(100% / 9);
+}

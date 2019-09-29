@@ -10,6 +10,8 @@ const Board = props => {
       key={index}
       index={index}
       onBoardChange={props.onBoardChange}
+      highlight={props.highlight}
+      clicked={props.clicked}
     />
   ));
 

@@ -31,6 +31,7 @@ class App extends React.Component {
     this.setState({
       boardArr: changedBoard
     });
+    this.saveGame();
   };
 
   editedList = board => {
@@ -44,15 +45,15 @@ class App extends React.Component {
     this.setState({ editedList: editedList });
   };
 
+  saveGame = () => {
+    let stateSerialized = JSON.stringify(this.state);
+    window.localStorage.setItem("state", stateSerialized);
+  };
+
   lastSession = () => {
     let storage = JSON.parse(window.localStorage.getItem("state"));
     this.setState({ ...storage });
   };
-
-  componentDidMount() {
-    let stateSerialized = JSON.stringify(this.state);
-    window.localStorage.setItem("state", stateSerialized);
-  }
 
   newGame = () => {
     let nextGame = sudoku.generate(this.state.level);
@@ -62,6 +63,7 @@ class App extends React.Component {
       initialBoard: [...nextGame],
       boardArr: [...nextGame]
     });
+    this.saveGame();
   };
 
   resetGame = () => {
@@ -92,6 +94,7 @@ class App extends React.Component {
       initialBoard: [...board],
       boardArr: [...board]
     });
+    this.saveGame();
   };
 
   highlight = index => {
@@ -121,7 +124,10 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="App">
+      <div
+        className="App"
+        onClick={this.state.playing === true ? () => this.saveGame() : null}
+      >
         {!this.state.playing ? (
           <StartingView level={this.assignDifficulty} last={this.lastSession} />
         ) : (

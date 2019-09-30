@@ -17,27 +17,62 @@ class App extends React.Component {
       boardArr: [],
       clicked: "",
       highlight: [],
-      solvedSudoku: []
+      solvedSudoku: [],
+      editedList: []
     };
   }
 
   onBoardChange = (event, i) => {
     let initialBoard = [...this.state.initialBoard];
+    let editedList = [];
+    for (let index = 0; index < initialBoard.length; index++) {
+      if (initialBoard[index] === ".") {
+        editedList.push(index);
+      }
+    }
     let changedBoard = this.state.boardArr;
     changedBoard[i] =
       changedBoard[i] === "." ? event.target.value : initialBoard[i];
     this.setState({
-      boardArr: changedBoard
+      boardArr: changedBoard,
+      editedList: editedList
     });
+    console.log(
+      "init",
+      this.state.initialBoard,
+      "board",
+      this.state.boardArr,
+      "solved",
+      this.state.solvedSudoku
+    );
   };
 
-  componentDidUpdate() {
-    window.localStorage.setItem("board", this.state.boardArr);
+  lastSession = () => {
+    let storage = JSON.parse(window.localStorage.getItem("state"));
+    //console.log(storage);
+    //console.log({ ...storage });
+    this.setState({ ...storage });
+  };
+
+  componentDidMount() {
+    let stateSerialized = JSON.stringify(this.state);
+    window.localStorage.setItem("state", stateSerialized);
   }
 
   newGame = () => {
-    let nextGame = [...sudoku.generate(this.state.level)];
-    this.setState({ initialBoard: nextGame, boardArr: nextGame });
+    let nextGame = sudoku.generate(this.state.level);
+    let initialBoard = [...nextGame];
+    let editedList = [];
+    for (let index = 0; index < initialBoard.length; index++) {
+      if (initialBoard[index] === ".") {
+        editedList.push(index);
+      }
+    }
+    this.setState({
+      solvedSudoku: sudoku.solve([...nextGame]),
+      initialBoard: [...nextGame],
+      boardArr: [...nextGame]
+    });
   };
 
   resetGame = () => {
@@ -47,7 +82,9 @@ class App extends React.Component {
   };
 
   solveGame = () => {
-    this.setState({ boardArr: [...this.state.solveSudoku] });
+    let solved = [...this.state.solvedSudoku];
+    //console.log([...this.state.solvedSudoku]);
+    this.setState({ boardArr: solved });
   };
 
   checkGame = () => {
@@ -60,7 +97,7 @@ class App extends React.Component {
   assignDifficulty = event => {
     const board = sudoku.generate(event.target.value);
     this.setState({
-      solveSudoku: sudoku.solve(board),
+      solvedSudoku: sudoku.solve(board),
       playing: true,
       level: event.target.value,
       initialBoard: [...board],
@@ -68,46 +105,47 @@ class App extends React.Component {
     });
   };
 
-  row = index => {
+  highlight = index => {
     let x = Math.floor(index / 9);
     let row = [];
     for (let i = 0; i < 9; i++) {
       row.push(x * 9 + i);
     }
-    let y = this.state.solveSudoku;
+    let y = this.state.solvedSudoku;
     let grid = sudoku.board_string_to_grid(y);
     let position = grid[[x]].indexOf([...y][index]);
-    console.log("pos", position);
     let col = [];
     for (let i = 0; i < 9; i++) {
       col.push(i * 9 + position);
     }
-    console.log("xol", [...row, ...col]);
     this.setState({
       highlight: [...row, ...col]
     });
   };
 
-  highlight = (event, index) => {
+  highlightHandler = (event, index) => {
     this.setState({
       clicked: index
     });
-    this.row(index);
+    this.highlight(index);
+    //console.log("state", this.state.boardArr, " ", this.state.initialBoard);
   };
 
   render() {
     return (
       <div className="App">
         {!this.state.playing ? (
-          <StartingView level={this.assignDifficulty} />
+          <StartingView level={this.assignDifficulty} last={this.lastSession} />
         ) : (
           <Wrapper>
             <Title />
             <Board
               boardArr={this.state.boardArr}
               onBoardChange={this.onBoardChange}
-              highlight={this.highlight}
-              clicked={this.state.highlight}
+              highlightHandler={this.highlightHandler}
+              highlight={this.state.highlight}
+              clicked={this.state.clicked}
+              editedList={this.state.editedList}
             />
             <Controls
               newGame={this.newGame}

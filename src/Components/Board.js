@@ -10,8 +10,10 @@ const Board = props => {
       key={index}
       index={index}
       onBoardChange={props.onBoardChange}
+      highlightHandler={props.highlightHandler}
       highlight={props.highlight}
       clicked={props.clicked}
+      editedList={props.editedList}
     />
   ));
 

@@ -25,7 +25,7 @@ const StargtingView = props => {
         <button onClick={event => props.level(event)} value="inhuman">
           Inhuman
         </button>
-        <button>Last Session</button>
+        <button onClick={() => props.last()}>Last Session</button>
       </div>
     </Wrapper>
   );

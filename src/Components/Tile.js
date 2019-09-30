@@ -9,8 +9,15 @@ const Tile = props => {
       max="9"
       value={props.value < 1 || props.value > 9 ? "" : props.value}
       onChange={event => props.onBoardChange(event, props.index)}
-      onClick={event => props.highlight(event, props.index)}
-      className={props.clicked.includes(props.index) ? "highlight" : ""}
+      onClick={event => props.highlightHandler(event, props.index)}
+      className={
+        (!props.editedList.includes(props.index) ? "nonedit " : "edit") +
+        (props.highlight.includes(props.index)
+          ? props.index === props.clicked
+            ? " edited"
+            : " highlight"
+          : "")
+      }
     />
   );
 };

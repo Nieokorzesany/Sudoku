@@ -24,33 +24,28 @@ class App extends React.Component {
 
   onBoardChange = (event, i) => {
     let initialBoard = [...this.state.initialBoard];
-    let editedList = [];
-    for (let index = 0; index < initialBoard.length; index++) {
-      if (initialBoard[index] === ".") {
-        editedList.push(index);
-      }
-    }
+    this.editedList(this.state.initialBoard);
     let changedBoard = this.state.boardArr;
     changedBoard[i] =
       changedBoard[i] === "." ? event.target.value : initialBoard[i];
     this.setState({
-      boardArr: changedBoard,
-      editedList: editedList
+      boardArr: changedBoard
     });
-    console.log(
-      "init",
-      this.state.initialBoard,
-      "board",
-      this.state.boardArr,
-      "solved",
-      this.state.solvedSudoku
-    );
+  };
+
+  editedList = board => {
+    let initialBoard = [...board];
+    let editedList = [];
+    for (let index = 0; index < board.length; index++) {
+      if (initialBoard[index] === ".") {
+        editedList.push(index);
+      }
+    }
+    this.setState({ editedList: editedList });
   };
 
   lastSession = () => {
     let storage = JSON.parse(window.localStorage.getItem("state"));
-    //console.log(storage);
-    //console.log({ ...storage });
     this.setState({ ...storage });
   };
 
@@ -61,13 +56,7 @@ class App extends React.Component {
 
   newGame = () => {
     let nextGame = sudoku.generate(this.state.level);
-    let initialBoard = [...nextGame];
-    let editedList = [];
-    for (let index = 0; index < initialBoard.length; index++) {
-      if (initialBoard[index] === ".") {
-        editedList.push(index);
-      }
-    }
+    this.editedList(nextGame);
     this.setState({
       solvedSudoku: sudoku.solve([...nextGame]),
       initialBoard: [...nextGame],
@@ -83,7 +72,7 @@ class App extends React.Component {
 
   solveGame = () => {
     let solved = [...this.state.solvedSudoku];
-    //console.log([...this.state.solvedSudoku]);
+    this.editedList(this.state.initialBoard);
     this.setState({ boardArr: solved });
   };
 
@@ -128,7 +117,6 @@ class App extends React.Component {
       clicked: index
     });
     this.highlight(index);
-    //console.log("state", this.state.boardArr, " ", this.state.initialBoard);
   };
 
   render() {

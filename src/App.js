@@ -28,6 +28,7 @@ class App extends React.Component {
     this.setState({
       boardArr: changedBoard
     });
+    console.log(this.state.boardArr);
   };
 
   componentDidUpdate() {
@@ -48,7 +49,13 @@ class App extends React.Component {
   solveGame = () => {
     let solve = this.state.boardArr.join("");
     solve = sudoku.solve(solve);
+    console.log("solve", solve);
     this.setState({ boardArr: [...solve] });
+    console.log(
+      this.state.row.includes(this.state.clicked),
+      this.state.clicked,
+      this.state.row
+    );
   };
 
   checkGame = () => {
@@ -59,12 +66,12 @@ class App extends React.Component {
   };
 
   assignDifficulty = event => {
-    let board = [...sudoku.generate(event.target.value)];
+    const board = sudoku.generate(event.target.value);
     this.setState({
       playing: true,
       level: event.target.value,
-      initialBoard: board,
-      boardArr: board
+      initialBoard: [...board],
+      boardArr: [...board]
     });
   };
 
@@ -78,12 +85,6 @@ class App extends React.Component {
       clicked: index,
       row: row
     });
-
-    console.log(
-      this.state.row.includes(this.state.clicked),
-      this.state.clicked,
-      this.state.row
-    );
   };
 
   render() {

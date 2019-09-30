@@ -2,7 +2,6 @@ import React from "react";
 import "../Sass/Tile.scss";
 
 const Tile = props => {
-  let row = props.clicked[1];
   return (
     <input
       type="number"

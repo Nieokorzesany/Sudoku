@@ -1,3 +1,14 @@
+body {
+  height: 100vh;
+}
 .App {
   text-align: center;
+}
+
+.theApp {
+  min-width: 900px;
+  margin-left: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }

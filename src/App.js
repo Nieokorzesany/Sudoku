@@ -4,7 +4,6 @@ import Board from "./Components/Board";
 import Title from "./Components/Title";
 import sudoku from "sudoku-umd";
 import Controls from "./Components/Controls";
-import Wrapper from "./Components/Wrapper";
 import StartingView from "./Components/StartingView";
 
 class App extends React.Component {
@@ -67,8 +66,9 @@ class App extends React.Component {
   };
 
   resetGame = () => {
+    let onGoing = this.state.initialBoard;
     this.setState({
-      boardArr: this.state.initialBoard
+      boardArr: onGoing
     });
   };
 
@@ -95,6 +95,7 @@ class App extends React.Component {
       boardArr: [...board]
     });
     this.saveGame();
+    this.editedList([...board]);
   };
 
   highlight = index => {
@@ -122,32 +123,47 @@ class App extends React.Component {
     this.highlight(index);
   };
 
+  changeDifficulty = () => {
+    let playing = this.setState.playing;
+    this.setState({ playing: playing });
+  };
+
   render() {
     return (
       <div
         className="App"
-        onClick={this.state.playing === true ? () => this.saveGame() : null}
+        onClick={
+          this.state.playing === true
+            ? () => {
+                this.saveGame();
+                this.editedList(this.state.initialBoard);
+              }
+            : null
+        }
       >
         {!this.state.playing ? (
           <StartingView level={this.assignDifficulty} last={this.lastSession} />
         ) : (
-          <Wrapper>
-            <Title />
-            <Board
-              boardArr={this.state.boardArr}
-              onBoardChange={this.onBoardChange}
-              highlightHandler={this.highlightHandler}
-              highlight={this.state.highlight}
-              clicked={this.state.clicked}
-              editedList={this.state.editedList}
-            />
+          <div className="theApp">
+            <div>
+              <Title />
+              <Board
+                boardArr={this.state.boardArr}
+                onBoardChange={this.onBoardChange}
+                highlightHandler={this.highlightHandler}
+                highlight={this.state.highlight}
+                clicked={this.state.clicked}
+                editedList={this.state.editedList}
+              />
+            </div>
             <Controls
               newGame={this.newGame}
               reset={this.resetGame}
               check={this.checkGame}
               solved={this.solveGame}
+              changeDiff={this.changeDifficulty}
             />
-          </Wrapper>
+          </div>
         )}
       </div>
     );

@@ -1,6 +1,7 @@
 import React from "react";
 import Title from "./Title";
 import Wrapper from "./Wrapper";
+import "../Sass/Level.scss";
 
 const StargtingView = props => {
   return (

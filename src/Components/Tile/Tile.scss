@@ -5,7 +5,7 @@ input::-webkit-inner-spin-button {
 }
 
 input {
-  border: 1px solid blue;
+  border: 1px solid black;
   font-size: 25px;
   font-weight: bolder;
   box-sizing: border-box;
@@ -14,13 +14,13 @@ input {
   height: calc(100% / 9);
 }
 .edit {
-  color: blue;
+  color: red;
 }
 .highlight {
   background: #eeeedd;
 }
 .nonedit {
-  color: red;
+  color: grey;
 }
 
 .edited {
